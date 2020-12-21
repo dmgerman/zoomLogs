@@ -1,0 +1,60 @@
+#+STARTUP: showall
+#+STARTUP: lognotestate
+#+TAGS: research(r) uvic(u) today(y) todo(t) cooking(c)
+#+SEQ_TODO: TODO(t) STARTED(s) DEFERRED(r) CANCELLED(c) | WAITING(w) DELEGATED(d) APPT(a) DONE(d)
+#+DRAWERS: HIDDEN STATE
+#+ARCHIVE: %s_done::
+#+TITLE: How to use
+#+CATEGORY: 
+#+PROPERTY: header-args:sql             :engine postgresql  :exports both :cmdline csc370
+#+PROPERTY: header-args:sqlite          :db /path/to/db  :colnames yes
+#+PROPERTY: header-args:C++             :results output :flags -std=c++17 -Wall --pedantic -Werror
+#+PROPERTY: header-args:R               :results output  :colnames yes
+#+OPTIONS: ^:nil
+
+* Requirements
+
+1. Zoom logs should include the metadata of the meeting and should not be created with "unique userid" option
+
+2. You need a file with the students ids. The format should be semicolon separated and should
+   should have 3 fields (the second is the netlinkid, third is the studentid). The first field is ignored.
+
+  #+begin_example
+German, Daniel;dmg;V00000000;
+  #+end_example
+
+
+* zooms_to_sid.py
+
+replace name, netlink with studentid. Ignore records of students not 
+
+#+begin_src sh
+zoom_to_sid.py students.csv zoom-log.csv > sid-log.csv
+#+end_src
+
+* zoom-logs.py
+
+Summarize logs. Uses the output created by zooms_to_sid
+
+#+begin_src sh
+zoom-logs.py <starting-time-zoom-format> <lecture length in minutes> <student-log-file>
+#+end_src
+
+The time should be 12 hrs based, and it should include seconds. I just made it the same as the Zoom logs. For example,
+this is for a lecture that starts and 1 PM and goes for approximately 80 minutes
+
+#+begin_src sh
+zoom-logs.py '01:00:00 PM' 80 sid-log.csv > sid-total-time.csv
+#+end_src
+
+The output would be list of record like this:
+
+The first field is the name of the meeting, followed by the date, the sid, the number of minutes, the starting time of attendance
+and the last time of attendance, and the number of records for that student in the logs.
+
+Note that a student might have connected and disconnected several times. 
+
+#+begin_src 
+csc370,2020-10-29,V00000000,80.0,10/29/2020 12:49:01 PM,10/29/2020 02:23:38 PM,1
+#+end_src
+
