@@ -54,7 +54,22 @@ and the last time of attendance, and the number of records for that student in t
 
 Note that a student might have connected and disconnected several times. 
 
-#+begin_src 
+#+begin_example
 csc370,2020-10-29,V00000000,80.0,10/29/2020 12:49:01 PM,10/29/2020 02:23:38 PM,1
-#+end_src
+#+end_example
 
+* summary-by-sid.py
+
+  Summarize each student into a csv file where each row is something like this. The first is the sid,
+  then a set three columns: date, minutes attended, minutes lecture (this time is extracted from
+  student V00000000, the instructor
+
+  #+begin_example
+V00000000,2020-11-23,80.0,80.0,2020-11-26,76.9,76.9,2020-11-30,80.0,80.0
+  #+end_example
+
+To run it, simply pipe all the files:
+
+  #+begin_src sh
+cat att/participants_95695880858_20112*.csv | ../summary-by-sid.py
+#+end_src

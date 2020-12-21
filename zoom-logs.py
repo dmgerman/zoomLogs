@@ -143,7 +143,7 @@ grouped = [list(g) for k, g in itertools.groupby(rSorted, lambda x: x[0])]
 
 #print(list(grouped)[0])
 
-print ("sid;lectureTimeAttended;firstTime;lastTime")
+print ("sid,lectureTimeAttended,firstTime,lastTime")
 
 for studentRecords in grouped:
     minutes = "{:.1f}".format(convert_to_minutes(studentRecords))
