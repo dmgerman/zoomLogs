@@ -6,16 +6,19 @@ import itertools
 
 allRecords = fileinput.input()
 
-records =  filter(lambda x: x[0] != 'sid', map(lambda x: x.rstrip().split(','), allRecords))
+def toDict(x):
+    return dict(zip(["cid","date","sid","min","from","to","n"], x.rstrip().split(',')))
 
-rSorted = sorted(list(records), key=lambda x: x[2])
+records =  filter(lambda x: x['sid'] != 'sid', map(toDict, allRecords))
 
-grouped = [list(g) for k, g in itertools.groupby(rSorted, lambda x: x[2])]
+rSorted = sorted(list(records), key=lambda x: x['sid'])
+
+grouped = [list(g) for k, g in itertools.groupby(rSorted, lambda x: x['sid'])]
 
 def processStudent(stRec):
     assert(len(stRec)>=1)
-    sid = stRec[0][2]
-    onlyDateMinPairs = sorted(map(lambda x: (x[1], x[3]), stRec))
+    sid = stRec[0]["sid"]
+    onlyDateMinPairs = sorted(map(lambda x: (x['date'], x['min']), stRec))
     return (sid,dict(onlyDateMinPairs))
 
 perStudent = map(processStudent, grouped)
